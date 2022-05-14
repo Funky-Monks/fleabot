@@ -6,7 +6,7 @@
   tasks:
 
   - name: Update repository
-    shell: git pull master
+    shell: git pull origin master
     args:
       chdir: /home/fleabot/fleabot
 
