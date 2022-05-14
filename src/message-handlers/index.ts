@@ -1,8 +1,8 @@
 import {LyricsTriviaMessageHandler} from "./lyricsTriviaMessageHandler";
 import {ConvertToCelsiusHandler} from "./convertToCelsiusHandler";
 import {ConvertToFahrenheitHandler} from "./convertToFahrenheitHandler";
-import {TheSmellsHandler} from "./thesmellshandler";
+import {SoundsHandler} from "./soundsHandler";
 
 export const handlers = [
-    new LyricsTriviaMessageHandler(), new ConvertToCelsiusHandler(), new ConvertToFahrenheitHandler(), new TheSmellsHandler()
+    new LyricsTriviaMessageHandler(), new ConvertToCelsiusHandler(), new ConvertToFahrenheitHandler(), new SoundsHandler()
 ]

@@ -26,7 +26,7 @@ const mapping: Mapping = [
 
 ]
 
-export class TheSmellsHandler extends MessageHandler {
+export class SoundsHandler extends MessageHandler {
 
     triggerMessageSubstrings(): string[] {
         return ["sound"]
