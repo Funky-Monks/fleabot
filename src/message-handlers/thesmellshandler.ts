@@ -29,7 +29,7 @@ const mapping: Mapping = [
 export class TheSmellsHandler extends MessageHandler {
 
     triggerMessageSubstrings(): string[] {
-        return ["play"]
+        return ["sound"]
     }
 
     async handle(message: Message): Promise<void> {
