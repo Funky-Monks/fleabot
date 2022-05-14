@@ -125,7 +125,7 @@ function getSectionFromSongObject(songObject: SongDetails): string {
 
   // locates and slices section
   const position1 =
-    nth_occurrence(songObject.lyrics, "]\n", randomSectionNumber) + 1; // Plus one is needed to delete ']' character
+    nth_occurrence(songObject.lyrics, "]\n", randomSectionNumber)
   const position2 = nth_occurrence(
     songObject.lyrics,
     "\n[",
