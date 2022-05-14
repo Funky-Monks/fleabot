@@ -27,6 +27,14 @@ jobs:
         username: Fleabot updates
         args: Fleabot is being updated. Stay tuned...
 
+    - name: Send FM start update message
+      uses: appleboy/discord-action@master
+      with:
+        webhook_id: ${{ secrets.FM_DISCORD_WEBHOOK_ID }}
+        webhook_token: ${{ secrets.FM_DISCORD_WEBHOOK_TOKEN }}
+        username: Fleabot updates
+        args: Fleabot is being updated. Stay tuned...
+
     - name: Install SSH Key
       uses: shimataro/ssh-key-action@v2
       with:
@@ -49,5 +57,13 @@ jobs:
       with:
         webhook_id: ${{ secrets.CS_DISCORD_WEBHOOK_ID }}
         webhook_token: ${{ secrets.CS_DISCORD_WEBHOOK_TOKEN }}
+        username: Fleabot updates
+        args: Fleabot update is finished!
+
+    - name: Send FM end update message
+      uses: appleboy/discord-action@master
+      with:
+        webhook_id: ${{ secrets.FM_DISCORD_WEBHOOK_ID }}
+        webhook_token: ${{ secrets.FM_DISCORD_WEBHOOK_TOKEN }}
         username: Fleabot updates
         args: Fleabot update is finished!
