@@ -1,6 +1,5 @@
 import {MessageHandler} from "./messageHandler";
 import {Message, MessageAttachment} from "discord.js";
-import {extractMessageWithoutCommand} from "../utils";
 import j from "jimp"
 
 export class SquareHandler extends MessageHandler {
