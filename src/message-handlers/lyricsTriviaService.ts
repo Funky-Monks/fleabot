@@ -113,8 +113,8 @@ async function getSongObject(sa: SongTitleAndArtist): Promise<SongDetails> {
 
 function getSectionFromSongObject(songObject: SongDetails): string {
   // purifies lyrics string a bit
-  songObject.lyrics = songObject.lyrics.replace("]\n\n[", "");
   try {
+    songObject.lyrics = songObject.lyrics.replace("]\n\n[", "");
     songObject.lyrics = songObject.lyrics.replace("Embed", "");
   } catch (error) {}
 
@@ -125,7 +125,7 @@ function getSectionFromSongObject(songObject: SongDetails): string {
 
   // locates and slices section
   const position1 =
-    nth_occurrence(songObject.lyrics, "]\n", randomSectionNumber)
+    nth_occurrence(songObject.lyrics, "]\n", randomSectionNumber) + 1; // Plus one is needed to delete ']' character
   const position2 = nth_occurrence(
     songObject.lyrics,
     "\n[",
