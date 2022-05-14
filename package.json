@@ -17,8 +17,7 @@
     "node-cron": "^3.0.0",
     "node-fetch": "^2.6.1",
     "node-tweet-stream": "^2.1.0",
-    "reddit-fetch": "^1.5.1",
-    "update": "^0.7.4"
+    "reddit-fetch": "^1.5.1"
   },
   "devDependencies": {
     "@types/async-retry": "^1.4.4",
@@ -29,7 +28,6 @@
     "@types/typescript": "^2.0.0",
     "husky": "^7.0.4",
     "lint-staged": "^12.4.1",
-    "node": "^16.14.2",
     "prettier": "^2.6.2",
     "rimraf": "^3.0.2",
     "ts-migrate": "^0.1.28",
