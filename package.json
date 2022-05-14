@@ -28,6 +28,7 @@
     "@types/typescript": "^2.0.0",
     "husky": "^7.0.4",
     "lint-staged": "^12.4.1",
+    "node": "^17.7.1",
     "prettier": "^2.6.2",
     "rimraf": "^3.0.2",
     "ts-migrate": "^0.1.28",
