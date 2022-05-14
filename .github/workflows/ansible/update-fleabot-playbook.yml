@@ -6,10 +6,15 @@
   tasks:
 
   - name: Update repository
-    git:
-      repo: 'https://github.com/Funky-Monks/fleabot'
-      dest: /home/fleabot/fleabot
-      force: yes
+    shell: git pull master
+    args:
+      chdir: /home/fleabot/fleabot
+
+
+  - name: Rebuild application
+    shell: npm install && npm run build
+    args:
+      chdir:  /home/fleabot/fleabot
 
   - name: Run application
     shell: pm2 restart dist/fleabot.js
