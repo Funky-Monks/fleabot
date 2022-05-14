@@ -18,7 +18,7 @@ const knownUsersToTimezones: Record<string, string[]> = config.tzUserRegistry;
 export const timeCommand: Command =  {
   data: new SlashCommandBuilder()
     .setName("coffeetime")
-    .setDescription("Calculates the current time for Coffee Shop members")
+    .setDescription("Calculates the current time")
     .addNumberOption((option) =>
       option
         .setName("offset-hours")
