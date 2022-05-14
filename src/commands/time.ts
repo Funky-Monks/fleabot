@@ -17,7 +17,7 @@ const knownUsersToTimezones: Record<string, string[]> = config.tzUserRegistry;
 
 export const timeCommand: Command =  {
   data: new SlashCommandBuilder()
-    .setName("coffeetime")
+    .setName("membertime")
     .setDescription("Calculates the current time")
     .addNumberOption((option) =>
       option
@@ -47,7 +47,7 @@ export const timeCommand: Command =  {
     }
 
     const passEmbed = new MessageEmbed()
-      .setTitle(`Current local times of coffee fellows ${offset !== 0 ? `in ${offset} hours` : ""}`)
+      .setTitle(`Local times of members ${offset !== 0 ? `in ${offset} hours` : ""}`)
       .addFields(fields)
       .setColor("#c8ff00");
     await interaction.editReply({ embeds: [passEmbed] });
