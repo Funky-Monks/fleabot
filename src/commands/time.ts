@@ -31,7 +31,10 @@ export const timeCommand: Command =  {
     ) as SlashCommandBuilder,
   async execute(interaction: CommandInteraction) {
     await interaction.deferReply();
-
+    if (interaction.guild?.id !== "483089063369375764") {
+      await interaction.editReply("Not enabled");
+      return;
+    }
     const offset: number =
       interaction.options.getNumber("offset-hours", false) || 0;
 
