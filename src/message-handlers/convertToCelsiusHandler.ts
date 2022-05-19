@@ -5,7 +5,7 @@ import {extractMessageWithoutCommand} from "../utils";
 export class ConvertToCelsiusHandler extends MessageHandler {
 
     triggerMessageSubstrings(): string[] {
-        return ["ctc", "converttocelsius"]
+        return ["ftc", "converttocelsius"]
     }
 
     async handle(message: Message): Promise<void> {
