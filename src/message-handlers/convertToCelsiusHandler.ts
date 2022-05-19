@@ -13,7 +13,7 @@ export class ConvertToCelsiusHandler extends MessageHandler {
         if (!messageArguments) {
             message.channel.send("Put a number dummy");
         } else {
-            const temperature = parseInt(messageArguments[0]);
+            const temperature = parseInt(messageArguments);
             message.channel.send(ConvertToCelsiusHandler.fToC(temperature));
         }
     }
