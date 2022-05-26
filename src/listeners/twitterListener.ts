@@ -1,6 +1,11 @@
 import { Listener } from "./listener";
 import { logger } from "../logger";
-import {AnyChannel, Channel, MessageEmbed, PartialTextBasedChannelFields} from "discord.js";
+import {
+  AnyChannel,
+  Channel,
+  MessageEmbed,
+  PartialTextBasedChannelFields,
+} from "discord.js";
 import { client } from "../utils";
 import Twit from "node-tweet-stream";
 import { ConfigModel } from "../config/configModel";
@@ -11,8 +16,8 @@ export class TwitterListener extends Listener<"rhcp_twitter_toggle"> {
   }
 
   async start(config: ConfigModel): Promise<void> {
-      logger.info("Setting up TwitterListener");
-      const t = new Twit({
+    logger.info("Setting up TwitterListener");
+    const t = new Twit({
       consumer_key: config.twitterConsumerKey,
       consumer_secret: config.twitterConsumerSecret,
       //app_only_auth:true,
@@ -61,45 +66,47 @@ export class TwitterListener extends Listener<"rhcp_twitter_toggle"> {
     }
 
     async function chatPost(
-        content: any,
-        author: any,
-        atAuthor: any,
-        tweetURL: any,
-        authorPfp: any,
-        media: any
+      content: any,
+      author: any,
+      atAuthor: any,
+      tweetURL: any,
+      authorPfp: any,
+      media: any
     ) {
-        const authorTweet = author + " @" + atAuthor;
-        const message = new MessageEmbed()
-            .setColor("#00acee")
-            .setDescription(content)
-            .setTimestamp()
-            .setAuthor({
-                name: authorTweet,
-                iconURL: authorPfp,
-                url: tweetURL,
-            })
-            .setURL(tweetURL)
-            .setFooter({
-                text: "Twitter",
-                iconURL:
-                    "https://raw.githubusercontent.com/og-brandon/fleabot/master/images/twitter.png",
+      const authorTweet = author + " @" + atAuthor;
+      const message = new MessageEmbed()
+        .setColor("#00acee")
+        .setDescription(content)
+        .setTimestamp()
+        .setAuthor({
+          name: authorTweet,
+          iconURL: authorPfp,
+          url: tweetURL,
+        })
+        .setURL(tweetURL)
+        .setFooter({
+          text: "Twitter",
+          iconURL:
+            "https://raw.githubusercontent.com/og-brandon/fleabot/master/images/twitter.png",
+        });
+
+      if (!!media)
+        for (let j = 0; j < media.length; j++)
+          message.setImage(media[j].media_url);
+
+      for (const channelId of config.twitter_channel) {
+        try {
+          const channel = await client.channels.fetch(channelId);
+          // @ts-ignore
+          if (channel["send"] !== undefined) {
+            await (channel as PartialTextBasedChannelFields).send({
+              embeds: [message],
             });
-
-        if (!!media)
-            for (let j = 0; j < media.length; j++)
-                message.setImage(media[j].media_url);
-
-        for (const channelId of config.twitter_channel) {
-            try {
-                const channel = await client.channels.fetch(channelId)
-                // @ts-ignore
-                if (channel["send"] !== undefined) {
-                    await (channel as PartialTextBasedChannelFields).send({embeds: [message]});
-                }
-            } catch (e) {
-                logger.warn(e);
-            }
+          }
+        } catch (e) {
+          logger.warn(e);
         }
+      }
     }
   }
 }

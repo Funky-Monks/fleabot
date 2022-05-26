@@ -7,15 +7,15 @@ import {
 } from "discord.js";
 import moment from "moment-timezone";
 import { client } from "../utils";
-import {logger} from "../logger";
+import { logger } from "../logger";
 import fs from "fs";
-import {Command} from "./command";
+import { Command } from "./command";
 
 const config = JSON.parse(fs.readFileSync("./config.json", "utf8"));
 
 const knownUsersToTimezones: Record<string, string[]> = config.tzUserRegistry;
 
-export const timeCommand: Command =  {
+export const timeCommand: Command = {
   data: new SlashCommandBuilder()
     .setName("membertime")
     .setDescription("Calculates the current time")
@@ -41,7 +41,9 @@ export const timeCommand: Command =  {
     const fields: EmbedFieldData[] = [];
     for (let tz of Object.keys(knownUsersToTimezones)) {
       const userIds: string[] = knownUsersToTimezones[tz];
-      const users = await Promise.all(userIds.map(userId => client.users.fetch(userId)))
+      const users = await Promise.all(
+        userIds.map((userId) => client.users.fetch(userId))
+      );
       const m = moment().utc().add(offset, "hours").tz(tz, false);
       fields.push({
         name: m.format("HH:mm:ss"),
@@ -50,7 +52,9 @@ export const timeCommand: Command =  {
     }
 
     const passEmbed = new MessageEmbed()
-      .setTitle(`Local times of members ${offset !== 0 ? `in ${offset} hours` : ""}`)
+      .setTitle(
+        `Local times of members ${offset !== 0 ? `in ${offset} hours` : ""}`
+      )
       .addFields(fields)
       .setColor("#c8ff00");
     await interaction.editReply({ embeds: [passEmbed] });

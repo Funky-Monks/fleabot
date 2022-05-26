@@ -11,37 +11,44 @@ import { commands } from "./commands";
 
 const config = loadConfig();
 
-client.once("ready", async() => {
+client.once("ready", async () => {
   const errors: Error[] = [];
   logger.info("Flea is preparing...");
 
   logger.info("Starting to set up routes...");
   try {
     const rest = new REST({ version: "9" }).setToken(config.token);
-    await rest.put(Routes.applicationCommands(config.clientId), {body: commands.map(cmd => cmd.data.toJSON())})
+    await rest.put(Routes.applicationCommands(config.clientId), {
+      body: commands.map((cmd) => cmd.data.toJSON()),
+    });
     logger.info("Successfully registered application commands.");
   } catch (e) {
     errors.push(e as Error);
-    logger.error(e)
+    logger.error(e);
   }
 
   logger.info("Setting up listeners...!");
-  for (const listener of listeners.filter(li => li.shouldBeStarted(config))) {
+  for (const listener of listeners.filter((li) => li.shouldBeStarted(config))) {
     try {
-      await listener.start(loadConfig())
+      await listener.start(loadConfig());
     } catch (e) {
       errors.push(e as Error);
-      logger.error(e)
+      logger.error(e);
     }
   }
   logger.info("Listeners set up");
-  logger.info(`Flea is ready. There were ${errors.length === 0 ? "no errors" : "errors"} during startup`);
+  logger.info(
+    `Flea is ready. There were ${
+      errors.length === 0 ? "no errors" : "errors"
+    } during startup`
+  );
 });
 
 client.on("messageCreate", async (message: Message) => {
   if (!message.content.startsWith(MESSAGE_PREFIX) || message.author.bot) return;
-  const matchingHandlers = handlers
-      .filter((handler) => handler.canHandle(message));
+  const matchingHandlers = handlers.filter((handler) =>
+    handler.canHandle(message)
+  );
 
   for (const matchingHandler of matchingHandlers) {
     logger.info("MessageCreate called with a matching string.");
@@ -56,8 +63,9 @@ client.on("messageCreate", async (message: Message) => {
 
 client.on("interactionCreate", async (interaction: Interaction) => {
   if (!interaction.isCommand()) return;
-  const matchingCommands = commands
-      .filter((cmd) => cmd.data.name === interaction.commandName);
+  const matchingCommands = commands.filter(
+    (cmd) => cmd.data.name === interaction.commandName
+  );
   for (const foundCmd of matchingCommands) {
     try {
       await foundCmd.execute(interaction);

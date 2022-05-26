@@ -1,1 +1,1 @@
-export const MESSAGE_PREFIX = "!"
+export const MESSAGE_PREFIX = "!";

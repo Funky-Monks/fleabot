@@ -1,6 +1,6 @@
-import {Client, Message} from "discord.js";
+import { Client, Message } from "discord.js";
 import fs from "fs";
-import {MESSAGE_PREFIX} from "./constants";
+import { MESSAGE_PREFIX } from "./constants";
 
 const config = JSON.parse(fs.readFileSync("./config.json", "utf8"));
 
@@ -37,9 +37,12 @@ export function getRandomInt(min: any, max: any) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-export function extractMessageWithoutCommand(message: Message, prefix = MESSAGE_PREFIX) {
+export function extractMessageWithoutCommand(
+  message: Message,
+  prefix = MESSAGE_PREFIX
+) {
   const args = message.content.slice(prefix.length).trim().split(" ");
-  args.shift()
+  args.shift();
   const messageArguments = args.join(" ");
   return messageArguments;
 }

@@ -33,7 +33,7 @@ export const lyricsCommand: Command = {
             songLyrics = songLyrics.replace("]\n\n[", "");
             try {
               songLyrics = songLyrics.replace("Embed", "");
-            } catch (error) { }
+            } catch (error) {}
 
             // counts how many sections in the song with lyrics are there
             const count = (songLyrics.match(/]\n/g) || []).length;
@@ -41,8 +41,13 @@ export const lyricsCommand: Command = {
             const randomSectionNumber = getRandomInt(0, count);
 
             // locates and slices section
-            let position1 = nth_occurrence(songLyrics, "]\n", randomSectionNumber) + 1; // Plus one is needed to delete ']' character
-            let position2 = nth_occurrence(songLyrics, "\n[", randomSectionNumber);
+            let position1 =
+              nth_occurrence(songLyrics, "]\n", randomSectionNumber) + 1; // Plus one is needed to delete ']' character
+            let position2 = nth_occurrence(
+              songLyrics,
+              "\n[",
+              randomSectionNumber
+            );
 
             const sectionChosen = songLyrics.slice(position1, position2);
 
@@ -67,7 +72,8 @@ export const lyricsCommand: Command = {
               .setTitle(songTitle)
               .setURL(songUrl)
               .setDescription(
-                sectionChosen + `\nCheck this song's lyrics at [Genius.com](${songUrl})`
+                sectionChosen +
+                  `\nCheck this song's lyrics at [Genius.com](${songUrl})`
               )
               .setThumbnail(
                 "https://i.pinimg.com/236x/39/2e/2a/392e2a325bcaa3caafe4efb6eec5f2a9--a-dream-anthony-kiedis.jpg"
