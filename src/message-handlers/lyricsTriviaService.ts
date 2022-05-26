@@ -3,6 +3,7 @@ import retry from "async-retry";
 import { Client } from "genius-lyrics";
 import fs from "fs";
 import { getRandomInt, nth_occurrence } from "../utils";
+import { Message } from "discord.js";
 
 const config = JSON.parse(fs.readFileSync("./config.json", "utf8"));
 logger.info(`Setting up genius with token ${config.geniusToken}`);
@@ -135,49 +136,64 @@ function getSectionFromSongObject(songObject: SongDetails): string {
   return songObject.lyrics.slice(position1, position2);
 }
 
-export async function getRandomSongSectionByArtist(
+async function generateLyricsSectionForMessage(
+  message: Message<boolean>,
   messageArguments: any
-): Promise<(SongDetails & { section: string }) | null> {
-  logger.info(`Getting random song for message ${messageArguments}`);
+) {
   try {
-    return await retry(
-      async () => {
-        try {
-          logger.info(`Retrieving random song for message ${messageArguments}`);
-          const artistId = await getArtistID(messageArguments);
-          logger.info(
-            `Artist ID for message ${messageArguments} is ${artistId.artistId}`
-          );
-          const songChosen = await getSongNameAndTitle(artistId);
-          logger.info(
-            `Song title found for artist id ${artistId.artistId}: ${songChosen.songTitle}`
-          );
-          const songObject = await getSongObject(songChosen);
-          logger.info(`Retrieving section from song ${songChosen.songTitle}`);
-          let section = getSectionFromSongObject(songObject);
-          if (!section) {
-            throw new Error(
-              `Did not retrieve section for song ${songChosen.songTitle}`
-            );
-          }
-          return {
-            ...songObject,
-            section,
-          };
-        } catch (e) {
-          logger.error("Failed to load song section", e);
-          throw e;
-        }
-      },
-      {
-        minTimeout: 100,
-        retries: 10,
-        factor: 1,
-      }
+    message.channel.sendTyping();
+    logger.info(`Retrieving random song for message ${messageArguments}`);
+    const artistId = await getArtistID(messageArguments);
+    logger.info(
+      `Artist ID for message ${messageArguments} is ${artistId.artistId}`
     );
+    const songChosen = await getSongNameAndTitle(artistId);
+    logger.info(
+      `Song title found for artist id ${artistId.artistId}: ${songChosen.songTitle}`
+    );
+    const songObject = await getSongObject(songChosen);
+    logger.info(`Retrieving section from song ${songChosen.songTitle}`);
+    let section = getSectionFromSongObject(songObject);
+    if (!section) {
+      throw new Error(
+        `Did not retrieve section for song ${songChosen.songTitle}`
+      );
+    }
+    return {
+      ...songObject,
+      section,
+    };
   } catch (e) {
-    logger.error("Retrieving songs failed for the last time");
-    logger.error(e);
+    logger.error("Failed to load song section", e);
+    throw e;
+  }
+}
+
+type SongDetailsWithSection = SongDetails & { section: string };
+
+export async function getRandomSongSectionByArtist(
+  message: Message,
+  messageArguments: any
+): Promise<SongDetailsWithSection | null> {
+  logger.info(`Getting random song for message ${messageArguments}`);
+
+  const ps: Promise<SongDetailsWithSection | null>[] = [];
+
+  for (let i = 0; i < 5; i++) {
+    ps.push(generateLyricsSectionForMessage(message, messageArguments));
+  }
+
+  const settled: PromiseSettledResult<SongDetailsWithSection | null>[] =
+    await Promise.allSettled(ps);
+
+  const fulfilled: PromiseFulfilledResult<SongDetailsWithSection>[] =
+    settled.filter(
+      (r) => r.status === "fulfilled"
+    ) as PromiseFulfilledResult<SongDetailsWithSection>[];
+  if (fulfilled.length > 0) {
+    logger.error("Retrieving songs failed");
+    return fulfilled[0].value;
+  } else {
     return null;
   }
 }

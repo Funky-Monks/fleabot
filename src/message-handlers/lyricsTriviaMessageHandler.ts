@@ -26,7 +26,10 @@ export class LyricsTriviaMessageHandler extends MessageHandler {
     if (!messageArguments) return;
 
     try {
-      const songObject = await getRandomSongSectionByArtist(messageArguments);
+      const songObject = await getRandomSongSectionByArtist(
+        message,
+        messageArguments
+      );
       if (!songObject) {
         message.channel.send(
           "An error happened 😬 Please try again, it might work."
