@@ -7,28 +7,8 @@ const config = JSON.parse(fs.readFileSync("./config.json", "utf8"));
 export const client = new Client({ intents: ["GUILDS", "GUILD_MESSAGES"] });
 void client.login(config.token);
 
-export function nth_occurrence(string: any, char: any, nth: any): number {
-  const first_index = string.indexOf(char);
-  const length_up_to_first_index = first_index + 1;
-
-  if (nth == 1) {
-    return first_index;
-  } else {
-    const string_after_first_occurrence = string.slice(
-      length_up_to_first_index
-    );
-    const next_occurrence = nth_occurrence(
-      string_after_first_occurrence,
-      char,
-      nth - 1
-    );
-
-    if (next_occurrence === -1) {
-      return -1;
-    } else {
-      return length_up_to_first_index + next_occurrence;
-    }
-  }
+export function nthOccurrence(haystack: string, needle: string, index: number): number {
+  return haystack.split(needle, index).join(needle).length;
 }
 
 export function getRandomInt(min: any, max: any) {
