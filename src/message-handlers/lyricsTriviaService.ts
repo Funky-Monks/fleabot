@@ -5,7 +5,7 @@ import fs from "fs";
 import { getRandomInt, nth_occurrence } from "../utils";
 
 const config = JSON.parse(fs.readFileSync("./config.json", "utf8"));
-logger.info(`Setting up genius with token ${config.geniusToken}`)
+logger.info(`Setting up genius with token ${config.geniusToken}`);
 const geniusClient = new Client(config.geniusToken);
 
 type ArtistIdAndName = {
@@ -83,7 +83,7 @@ type SongDetails = {
 };
 
 async function getSongObject(sa: SongTitleAndArtist): Promise<SongDetails> {
-  logger.info("Making search request to genius API")
+  logger.info("Making search request to genius API");
   const searches = await geniusClient.songs.search(
     geniusClient.songs.sanitizeQuery(sa.songTitle + " " + sa.songArtist)
   );
@@ -97,7 +97,7 @@ async function getSongObject(sa: SongTitleAndArtist): Promise<SongDetails> {
   // Pick first one
   const chosenSong = searches[0];
 
-  logger.info("Making lyrics request to genius API")
+  logger.info("Making lyrics request to genius API");
   const songLyrics = await chosenSong.lyrics();
   const songTitle = chosenSong.title;
   const songArt = chosenSong.thumbnail;
@@ -135,7 +135,9 @@ function getSectionFromSongObject(songObject: SongDetails): string {
   return songObject.lyrics.slice(position1, position2);
 }
 
-export async function getRandomSongSectionByArtist(messageArguments: any) {
+export async function getRandomSongSectionByArtist(
+  messageArguments: any
+): Promise<(SongDetails & { section: string }) | null> {
   logger.info(`Getting random song for message ${messageArguments}`);
   try {
     return await retry(
@@ -153,6 +155,11 @@ export async function getRandomSongSectionByArtist(messageArguments: any) {
           const songObject = await getSongObject(songChosen);
           logger.info(`Retrieving section from song ${songChosen.songTitle}`);
           let section = getSectionFromSongObject(songObject);
+          if (!section) {
+            throw new Error(
+              `Did not retrieve section for song ${songChosen.songTitle}`
+            );
+          }
           return {
             ...songObject,
             section,
