@@ -1,7 +1,7 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { CommandInteraction, Interaction, MessageEmbed } from "discord.js";
 import { setTimeout } from "node:timers/promises";
-import { getRandomInt, nth_occurrence } from "../utils";
+import { getRandomInt, nthOccurrence } from "../utils";
 
 import { logger } from "../logger";
 import retry from "async-retry";
@@ -42,8 +42,8 @@ export const lyricsCommand: Command = {
 
             // locates and slices section
             let position1 =
-              nth_occurrence(songLyrics, "]\n", randomSectionNumber) + 1; // Plus one is needed to delete ']' character
-            let position2 = nth_occurrence(
+              nthOccurrence(songLyrics, "]\n", randomSectionNumber) + 1; // Plus one is needed to delete ']' character
+            let position2 = nthOccurrence(
               songLyrics,
               "\n[",
               randomSectionNumber

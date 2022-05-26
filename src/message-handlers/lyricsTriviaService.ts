@@ -2,7 +2,7 @@ import { logger } from "../logger";
 import retry from "async-retry";
 import { Client } from "genius-lyrics";
 import fs from "fs";
-import { getRandomInt, nth_occurrence } from "../utils";
+import { getRandomInt, nthOccurrence } from "../utils";
 import { Message } from "discord.js";
 
 const config = JSON.parse(fs.readFileSync("./config.json", "utf8"));
@@ -126,8 +126,8 @@ function getSectionFromSongObject(songObject: SongDetails): string {
 
   // locates and slices section
   const position1 =
-    nth_occurrence(songObject.lyrics, "]\n", randomSectionNumber) + 1; // Plus one is needed to delete ']' character
-  const position2 = nth_occurrence(
+    nthOccurrence(songObject.lyrics, "]\n", randomSectionNumber) + 1; // Plus one is needed to delete ']' character
+  const position2 = nthOccurrence(
     songObject.lyrics,
     "\n[",
     randomSectionNumber
@@ -171,29 +171,34 @@ async function generateLyricsSectionForMessage(
 
 type SongDetailsWithSection = SongDetails & { section: string };
 
+async function loadThree(message: Message<boolean>, messageArguments: any) {
+  const ps: Promise<SongDetailsWithSection | null>[] = [];
+  for (let i = 0; i < 3; i++) {
+    ps.push(generateLyricsSectionForMessage(message, messageArguments));
+  }
+
+  const settled: PromiseSettledResult<SongDetailsWithSection | null>[] =
+      await Promise.allSettled(ps);
+
+  const fulfilled: PromiseFulfilledResult<SongDetailsWithSection>[] =
+      settled.filter(
+          (r) => r.status === "fulfilled"
+      ) as PromiseFulfilledResult<SongDetailsWithSection>[];
+  if (fulfilled.length > 0) {
+    return fulfilled[0].value;
+  } else {
+    throw new Error("No valid result");
+  }
+}
+
 export async function getRandomSongSectionByArtist(
   message: Message,
   messageArguments: any
 ): Promise<SongDetailsWithSection | null> {
   logger.info(`Getting random song for message ${messageArguments}`);
-
-  const ps: Promise<SongDetailsWithSection | null>[] = [];
-
-  for (let i = 0; i < 5; i++) {
-    ps.push(generateLyricsSectionForMessage(message, messageArguments));
-  }
-
-  const settled: PromiseSettledResult<SongDetailsWithSection | null>[] =
-    await Promise.allSettled(ps);
-
-  const fulfilled: PromiseFulfilledResult<SongDetailsWithSection>[] =
-    settled.filter(
-      (r) => r.status === "fulfilled"
-    ) as PromiseFulfilledResult<SongDetailsWithSection>[];
-  if (fulfilled.length > 0) {
-    logger.error("Retrieving songs failed");
-    return fulfilled[0].value;
-  } else {
-    return null;
-  }
+  return retry(async () => await loadThree(message, messageArguments), {
+    retries: 5,
+    minTimeout: 0,
+    factor: 1,
+  });
 }
