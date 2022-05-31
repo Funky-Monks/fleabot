@@ -133,7 +133,13 @@ function getSectionFromSongObject(songObject: SongDetails): string {
     randomSectionNumber
   );
 
-  return songObject.lyrics.slice(position1, position2);
+  const sectionChosen = songObject.lyrics.slice(position1, position2);
+
+  if (sectionChosen.toLowerCase().includes(songObject.title.toLowerCase())) {
+    throw new Error(`Song title found in section, trowing error and trying again.`);
+  }
+
+  return sectionChosen
 }
 
 async function generateLyricsSectionForMessage(
@@ -154,7 +160,7 @@ async function generateLyricsSectionForMessage(
     const songObject = await getSongObject(songChosen);
     logger.info(`Retrieving section from song ${songChosen.songTitle}`);
     let section = getSectionFromSongObject(songObject);
-    if (!section) {
+    if (!section || section === "") {
       throw new Error(
         `Did not retrieve section for song ${songChosen.songTitle}`
       );
