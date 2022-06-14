@@ -4,8 +4,8 @@ import { Command } from "./command";
 
 export const jaxToCustomaryCommand: Command = {
   data: new SlashCommandBuilder()
-    .setName("jax-to-customary")
-    .setDescription("Convert jax units to customary units")
+    .setName("jaxel-to-customary")
+    .setDescription("Convert jaxel units to customary units")
     .addNumberOption((option) =>
       option
         .setName("value")
@@ -16,7 +16,7 @@ export const jaxToCustomaryCommand: Command = {
     const value = interaction.options.getNumber("value");
     const embed = new MessageEmbed().setColor("#c8ff00");
 
-    const centimeter = (value || 0) * 160;
+    const centimeter = (value || 0) * 165;
 
     let inches = centimeter * 0.393700787;
     let feet = Math.floor(inches / 12);
@@ -26,7 +26,7 @@ export const jaxToCustomaryCommand: Command = {
       embed.addFields([
         {
           name: `Conversion result:`,
-          value: `${value} jax equals ${feet} ft ${inches} in`,
+          value: `${value} jaxel equals ${feet} ft ${inches} in`,
         },
       ]);
     } else {

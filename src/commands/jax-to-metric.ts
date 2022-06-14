@@ -4,8 +4,8 @@ import { Command } from "./command";
 
 export const jaxToMetricCommand: Command = {
   data: new SlashCommandBuilder()
-    .setName("jax-to-metric")
-    .setDescription("Convert jax units to metric units")
+    .setName("jaxel-to-metric")
+    .setDescription("Convert jaxel units to metric units")
     .addNumberOption((option) =>
       option
         .setName("value")
@@ -19,7 +19,7 @@ export const jaxToMetricCommand: Command = {
       embed.addFields([
         {
           name: `Conversion result:`,
-          value: `${value} jax equals ${value * 160} cm`,
+          value: `${value} jaxel equals ${value * 165} cm`,
         },
       ]);
     } else {

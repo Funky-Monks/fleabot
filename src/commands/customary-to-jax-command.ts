@@ -4,9 +4,9 @@ import { Command } from "./command";
 
 export const customaryToJaxCommand: Command = {
   data: new SlashCommandBuilder()
-    .setName("customary-to-jax")
+    .setName("customary-to-jaxel")
     .setDescription(
-      "Convert customary units to jax units. You can enter both feet and inches at the same time"
+      "Convert customary units to jaxel units. You can enter both feet and inches at the same time"
     )
     .addNumberOption((option) =>
       option
@@ -28,14 +28,14 @@ export const customaryToJaxCommand: Command = {
 
     const completeInches = feet * 12 + inches;
     const centimeter = 2.54 * completeInches;
-    const jax = centimeter / 160;
+    const jaxel = centimeter / 165;
     const formatted = new Intl.NumberFormat("en-US", {
       maximumFractionDigits: 2,
-    }).format(jax);
+    }).format(jaxel);
     embed.addFields([
       {
         name: `Conversion result:`,
-        value: `${feet} feet ${inches} in equals ${formatted} jax`,
+        value: `${feet} feet ${inches} in equals ${formatted} jaxel`,
       },
     ]);
     await interaction.reply({ embeds: [embed] });

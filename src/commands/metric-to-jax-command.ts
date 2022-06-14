@@ -4,9 +4,9 @@ import { Command } from "./command";
 
 export const metricToJaxCommand: Command = {
   data: new SlashCommandBuilder()
-    .setName("metric-to-jax")
+    .setName("metric-to-jaxel")
     .setDescription(
-      "Convert metric units to jax units. You can enter both centimeter and meter at the same time"
+      "Convert metric units to jaxel units. You can enter both centimeter and meter at the same time"
     )
     .addNumberOption((option) =>
       option
@@ -28,16 +28,16 @@ export const metricToJaxCommand: Command = {
       const sanitizedMeter = meter || 0;
       const sanitizedCentimeter = centimeter || 0;
       const completeCentimeter = sanitizedMeter * 100 + sanitizedCentimeter;
-      const jax = completeCentimeter / 160;
+      const jaxel = completeCentimeter / 165;
 
       const formatted = new Intl.NumberFormat("en-US", {
         maximumFractionDigits: 2,
-      }).format(jax);
+      }).format(jaxel);
 
       embed.addFields([
         {
           name: `Conversion result:`,
-          value: `${completeCentimeter} cm equals ${formatted} jax`,
+          value: `${completeCentimeter} cm equals ${formatted} jaxel`,
         },
       ]);
     } else {
