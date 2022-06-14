@@ -1,0 +1,42 @@
+import { SlashCommandBuilder } from "@discordjs/builders";
+import { CommandInteraction, MessageEmbed } from "discord.js";
+import { Command } from "./command";
+
+export const jaxToCustomaryCommand: Command = {
+  data: new SlashCommandBuilder()
+    .setName("jax-to-customary")
+    .setDescription("Convert jax units to customary units")
+    .addNumberOption((option) =>
+      option
+        .setName("value")
+        .setDescription("The value to convert")
+        .setRequired(true)
+    ) as SlashCommandBuilder,
+  async execute(interaction: CommandInteraction) {
+    const value = interaction.options.getNumber("value");
+    const embed = new MessageEmbed().setColor("#c8ff00");
+
+    const centimeter = (value || 0) * 160;
+
+    let inches = centimeter * 0.393700787;
+    let feet = Math.floor(inches / 12);
+    inches = feet %= 12;
+
+    if (value) {
+      embed.addFields([
+        {
+          name: `Conversion result:`,
+          value: `${value} jax equals ${feet} ft ${inches} in`,
+        },
+      ]);
+    } else {
+      embed.addFields([
+        {
+          name: `Failure: Invalid value given`,
+          value: `Please use a valid number value`,
+        },
+      ]);
+    }
+    await interaction.reply({ embeds: [embed] });
+  },
+};

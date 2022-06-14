@@ -7,7 +7,11 @@ const config = JSON.parse(fs.readFileSync("./config.json", "utf8"));
 export const client = new Client({ intents: ["GUILDS", "GUILD_MESSAGES"] });
 void client.login(config.token);
 
-export function nthOccurrence(haystack: string, needle: string, index: number): number {
+export function nthOccurrence(
+  haystack: string,
+  needle: string,
+  index: number
+): number {
   return haystack.split(needle, index).join(needle).length;
 }
 
