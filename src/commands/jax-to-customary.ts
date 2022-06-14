@@ -22,11 +22,15 @@ export const jaxToCustomaryCommand: Command = {
     let feet = Math.floor(inches / 12);
     inches %= 12;
 
+    const formattedInches = new Intl.NumberFormat("en-US", {
+      maximumFractionDigits: 2,
+    }).format(inches);
+
     if (value) {
       embed.addFields([
         {
           name: `Conversion result:`,
-          value: `${value} jaxel equals ${feet} ft ${inches} in`,
+          value: `${value} jaxel equals ${feet} ft ${formattedInches} in`,
         },
       ]);
     } else {
