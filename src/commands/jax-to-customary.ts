@@ -18,9 +18,9 @@ export const jaxToCustomaryCommand: Command = {
 
     const centimeter = (value || 0) * 165;
 
-    let inches = centimeter * 0.393700787;
+    let inches = (centimeter*0.393700787)
     let feet = Math.floor(inches / 12);
-    inches = feet %= 12;
+    inches %= 12;
 
     if (value) {
       embed.addFields([
