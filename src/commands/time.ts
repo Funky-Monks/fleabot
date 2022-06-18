@@ -46,9 +46,15 @@ export const timeCommand: Command = {
       );
       const m = moment().utc().add(offset, "hours").tz(tz, false);
       fields.push({
-        name: m.format("HH:mm:ss"),
+        name: `${m.format("HH:mm")} / ${m.format('hh:mm A')}`,
         value: users.map((user) => user.username).join(", "),
       });
+      fields.push(
+          {
+            name: '\u200b',
+            value: '\u200b'
+          }
+      )
     }
 
     const passEmbed = new MessageEmbed()
