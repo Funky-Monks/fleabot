@@ -46,7 +46,7 @@ export const timeCommand: Command = {
       );
       const m = moment().utc().add(offset, "hours").tz(tz, false);
       fields.push({
-        name: `${m.format("HH:mm")} / ${m.format("hh:mm A")}`,
+        name: `${m.format("HH:mm")} 🌐 - ${m.format("hh:mm A")} 🍔`,
         value: users.map((user) => user.toString()).join(" "),
         //inline: true,
       });
@@ -63,7 +63,7 @@ export const timeCommand: Command = {
 
     const passEmbed = new MessageEmbed()
       .setTitle(
-        `Local times of members ${offset !== 0 ? `in ${offset} hours` : ""}`
+        `⏰ Local times of members ${offset !== 0 ? `in ${offset} hours` : ""}`
       )
       .addFields(fields)
       .setColor("#ef9cdc");
