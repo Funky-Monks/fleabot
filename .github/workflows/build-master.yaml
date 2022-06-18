@@ -19,22 +19,6 @@ jobs:
         sudo add-apt-repository --yes --update ppa:ansible/ansible
         sudo apt install ansible
 
-    - name: Send CS start update message
-      uses: appleboy/discord-action@master
-      with:
-        webhook_id: ${{ secrets.CS_DISCORD_WEBHOOK_ID }}
-        webhook_token: ${{ secrets.CS_DISCORD_WEBHOOK_TOKEN }}
-        username: Fleabot updates
-        args: Fleabot is being updated. Stay tuned...
-
-    - name: Send FM start update message
-      uses: appleboy/discord-action@master
-      with:
-        webhook_id: ${{ secrets.FM_DISCORD_WEBHOOK_ID }}
-        webhook_token: ${{ secrets.FM_DISCORD_WEBHOOK_TOKEN }}
-        username: Fleabot updates
-        args: Fleabot is being updated. Stay tuned...
-
     - name: Install SSH Key
       uses: shimataro/ssh-key-action@v2
       with:
@@ -51,19 +35,3 @@ jobs:
 
     - name: Run playbook
       run: ansible-playbook ./.github/workflows/ansible/update-fleabot-playbook.yml -i ./.github/workflows/ansible/inventory.yml
-
-    - name: Send CS end update message
-      uses: appleboy/discord-action@master
-      with:
-        webhook_id: ${{ secrets.CS_DISCORD_WEBHOOK_ID }}
-        webhook_token: ${{ secrets.CS_DISCORD_WEBHOOK_TOKEN }}
-        username: Fleabot updates
-        args: Fleabot update is finished!
-
-    - name: Send FM end update message
-      uses: appleboy/discord-action@master
-      with:
-        webhook_id: ${{ secrets.FM_DISCORD_WEBHOOK_ID }}
-        webhook_token: ${{ secrets.FM_DISCORD_WEBHOOK_TOKEN }}
-        username: Fleabot updates
-        args: Fleabot update is finished!

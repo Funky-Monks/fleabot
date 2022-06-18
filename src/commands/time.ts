@@ -48,13 +48,8 @@ export const timeCommand: Command = {
       fields.push({
         name: `${m.format("HH:mm")} / ${m.format('hh:mm A')}`,
         value: users.map((user) => user.username).join(", "),
+        inline: true
       });
-      fields.push(
-          {
-            name: '\u200b',
-            value: '\u200b'
-          }
-      )
     }
 
     const passEmbed = new MessageEmbed()
