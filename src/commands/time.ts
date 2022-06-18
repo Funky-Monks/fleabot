@@ -48,25 +48,25 @@ export const timeCommand: Command = {
       fields.push({
         name: `${m.format("HH:mm")} / ${m.format("hh:mm A")}`,
         value: users.map((user) => user.toString()).join(" "),
-        inline: true,
+        //inline: true,
       });
     }
 
-    const padFields = fields.length % 3;
-    for (let i = 0; i < padFields; i++) {
-      fields.push({
-        name: "\u200b",
-        value: "\u200b",
-        inline: true,
-      });
-    }
+    // const padFields = fields.length % 3;
+    // for (let i = 0; i < padFields; i++) {
+    //   fields.push({
+    //     name: "\u200b",
+    //     value: "\u200b",
+    //     inline: true,
+    //   });
+    // }
 
     const passEmbed = new MessageEmbed()
       .setTitle(
         `Local times of members ${offset !== 0 ? `in ${offset} hours` : ""}`
       )
       .addFields(fields)
-      .setColor("#c8ff00");
+      .setColor("#ef9cdc");
     await interaction.editReply({ embeds: [passEmbed] });
   },
 };
