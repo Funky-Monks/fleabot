@@ -46,27 +46,22 @@ export const timeCommand: Command = {
       );
       const m = moment().utc().add(offset, "hours").tz(tz, false);
       fields.push({
-        name: `🌐 ${m.format("HH:mm")} - 🍔 ${m.format("hh:mm A")}`,
+        name: `🌐 ${m.format("HH:mm")} or 🍔 ${m.format("hh:mm A")}`,
         value: users.map((user) => user.toString()).join(" "),
-        //inline: true,
       });
     }
-
-    // const padFields = fields.length % 3;
-    // for (let i = 0; i < padFields; i++) {
-    //   fields.push({
-    //     name: "\u200b",
-    //     value: "\u200b",
-    //     inline: true,
-    //   });
-    // }
 
     const passEmbed = new MessageEmbed()
       .setTitle(
         `⏰ Local times of members ${offset !== 0 ? `in ${offset} hours` : ""}`
       )
       .addFields(fields)
-      .setColor("#ef9cdc");
+      .setColor("#ef9cdc")
+      .setFooter({
+        text: "Have a great day, Coffee Shop gang!",
+        iconURL:
+            "https://i.pinimg.com/originals/62/bd/2e/62bd2e623b0b6f08a672581b55c6c1a9.png",
+      });
     await interaction.editReply({ embeds: [passEmbed] });
   },
 };
