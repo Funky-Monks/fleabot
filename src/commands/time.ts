@@ -46,9 +46,18 @@ export const timeCommand: Command = {
       );
       const m = moment().utc().add(offset, "hours").tz(tz, false);
       fields.push({
-        name: `${m.format("HH:mm")} / ${m.format('hh:mm A')}`,
-        value: users.map((user) => user.username).join(", "),
-        inline: true
+        name: `${m.format("HH:mm")} / ${m.format("hh:mm A")}`,
+        value: users.map((user) => user.toString()).join(" "),
+        inline: true,
+      });
+    }
+
+    const padFields = fields.length % 3;
+    for (let i = 0; i < padFields; i++) {
+      fields.push({
+        name: "\u200b",
+        value: "\u200b",
+        inline: true,
       });
     }
 
