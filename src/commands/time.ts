@@ -46,7 +46,7 @@ export const timeCommand: Command = {
       );
       const m = moment().utc().add(offset, "hours").tz(tz, false);
       fields.push({
-        name: `${m.format("HH:mm")} 🌐 - ${m.format("hh:mm A")} 🍔`,
+        name: `🌐 ${m.format("HH:mm")} - 🍔 ${m.format("hh:mm A")}`,
         value: users.map((user) => user.toString()).join(" "),
         //inline: true,
       });
