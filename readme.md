@@ -4,7 +4,7 @@
 
 <p align="center"><img src="readme/fleabot.png" alt="trivia" width="150"/></p>
 
-Fleabot is a Discord bot dedicated to the chili peppers. You can give it commands to guess lyrics (pulled from a JSON with the band's lyrics in 278 songs, pulled from [genius.com](genius.com), guess what year some images were taken from (pulled from a JSON with getty images URL's), and [pass down the stratocaster](https://knowyourmeme.com/memes/pass-the-ball-down).
+Fleabot is a Discord bot dedicated to the Red Hot Chili Peppers. You can give it commands to guess lyrics (pulled from a JSON with the band's lyrics in 278 songs, pulled from [genius.com](genius.com), guess what year some images were taken from (pulled from a JSON with getty images URL's), and [pass down the stratocaster](https://knowyourmeme.com/memes/pass-the-ball-down).
 
 It's written in [DiscordJS](https://discord.js.org/) with some Python to pull lyrics from genius.com. It has command handling for the different commands which include:
 
