@@ -2,7 +2,6 @@ import { Interaction, Message } from "discord.js";
 import { logger } from "./logger";
 import { client } from "./utils";
 import { handlers } from "./message-handlers";
-import { listeners } from "./listeners";
 import { REST } from "@discordjs/rest";
 import { Routes } from "discord-api-types/v9";
 import { MESSAGE_PREFIX } from "./constants";
@@ -27,16 +26,6 @@ client.once("ready", async () => {
     logger.error(e);
   }
 
-  logger.info("Setting up listeners...!");
-  for (const listener of listeners.filter((li) => li.shouldBeStarted(config))) {
-    try {
-      await listener.start(loadConfig());
-    } catch (e) {
-      errors.push(e as Error);
-      logger.error(e);
-    }
-  }
-  logger.info("Listeners set up");
   logger.info(
     `Flea is ready. There were ${
       errors.length === 0 ? "no errors" : "errors"
