@@ -59,9 +59,7 @@ async function loadFile(attachmentUrl: string) {
     .png()
     .toBuffer();
   logger.info("Resized image. New bytesize: " + buf.byteLength)
-  const base64 = buf.toString("base64");
-  logger.info("Base64 size: " + base64.length)
-  return base64;
+  return buf;
 }
 
 async function createIconRole(userRoleName: string,
@@ -70,12 +68,12 @@ async function createIconRole(userRoleName: string,
                               position: number,
                               interaction: CommandInteraction<any>) {
   const userId = interaction.user.id;
-  const base64 = await loadFile(attachmentUrl);
+  const buffer = await loadFile(attachmentUrl);
 
   logger.info(`Role ${userRoleName} not found. Creating...`);
   try {
     const createdRole = await guild.roles.create({
-      icon: base64,
+      icon: buffer,
       name: userRoleName, position, reason: "Created by coffeebot"
     });
     logger.info(`Created role ${userRoleName} with icon url ${attachmentUrl}`);
