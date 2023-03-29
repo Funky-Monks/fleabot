@@ -3,6 +3,7 @@ import { jaxToMetricCommand } from "./jax-to-metric";
 import { metricToJaxCommand } from "./metric-to-jax-command";
 import { jaxToCustomaryCommand } from "./jax-to-customary";
 import { customaryToJaxCommand } from "./customary-to-jax-command";
+import { selectRoleColorCommand } from "./select-role-color";
 
 export const commands = [
   passCommand,
@@ -10,4 +11,5 @@ export const commands = [
   metricToJaxCommand,
   jaxToCustomaryCommand,
   customaryToJaxCommand,
+  selectRoleColorCommand
 ];
