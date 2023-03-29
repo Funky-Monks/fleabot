@@ -17,10 +17,12 @@ export const selectRoleColorCommand: Command = {
   async execute(interaction: CommandInteraction) {
 
     await interaction.reply({
+      ephemeral: true,
       embeds: [
         new MessageEmbed().setDescription("Request received. Please wait.")
       ]
     });
+
     const guild = interaction.guild!!;
     const userId = interaction.user.id;
     const hexcode = interaction.options.getString("hexcode")!!;
@@ -62,15 +64,19 @@ async function createColorRole(userRoleName: string,
     logger.info(`Assigned role ${userRoleName} to user with id ${userId}`);
     await interaction.editReply({
       embeds: [
-        new MessageEmbed().setDescription(`Created your role with color ${hexColorString}. Thank you!`).setColor(color)
+        new MessageEmbed()
+          .setDescription(`Created your role with color ${hexColorString}. Thank you!`)
+          .setColor(color)
       ]
     });
   } catch (e) {
-    const msg = `An error occurred while creating color role: ${util.inspect(e)}`;
-    logger.error(msg);
+    const message = `An error occurred while creating color role: ${util.inspect(e)}`;
+    logger.error(message);
     await interaction.editReply({
       embeds: [
-        new MessageEmbed().setDescription(msg).setColor("RED")
+        new MessageEmbed()
+          .setDescription(message)
+          .setColor("RED")
       ]
     });
   }
@@ -86,7 +92,9 @@ async function updateColorRole(userRole: Role, color: number, interaction: Comma
     logger.info(msg);
     await interaction.editReply({
       embeds: [
-        new MessageEmbed().setDescription(`Updated your color role with hex color ${hexColorString}`).setColor(color)
+        new MessageEmbed()
+          .setDescription(`Updated your color role with hex color ${hexColorString}`)
+          .setColor(color)
       ]
     });
   } catch (e) {
@@ -94,7 +102,9 @@ async function updateColorRole(userRole: Role, color: number, interaction: Comma
     logger.error(msg);
     await interaction.editReply({
       embeds: [
-        new MessageEmbed().setDescription(msg).setColor("RED")
+        new MessageEmbed()
+          .setDescription(msg)
+          .setColor("RED")
       ]
     });
   }
