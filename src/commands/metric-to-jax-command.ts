@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
-import { CommandInteraction, MessageEmbed } from "discord.js";
+import { Colors, CommandInteraction } from "discord.js";
 import { Command } from "./command";
 
 export const metricToJaxCommand: Command = {
@@ -21,33 +21,30 @@ export const metricToJaxCommand: Command = {
         .setRequired(false)
     ) as SlashCommandBuilder,
   async execute(interaction: CommandInteraction) {
-    const meter = interaction.options.getNumber("meter");
-    const centimeter = interaction.options.getNumber("centimeter");
-    const embed = new MessageEmbed().setColor("#c8ff00");
+    const meter = interaction.options.data.find(option => option.name === "meter")?.value;
+    const centimeter = interaction.options.data.find(option => option.name === "centimeter")?.value;
     if (meter || centimeter) {
       const sanitizedMeter = meter || 0;
       const sanitizedCentimeter = centimeter || 0;
-      const completeCentimeter = sanitizedMeter * 100 + sanitizedCentimeter;
+      const completeCentimeter = (sanitizedMeter as number) * 100 + (sanitizedCentimeter as number);
       const jaxel = completeCentimeter / 165;
 
       const formatted = new Intl.NumberFormat("en-US", {
-        maximumFractionDigits: 2,
+        maximumFractionDigits: 2
       }).format(jaxel);
-
-      embed.addFields([
-        {
-          name: `Conversion result:`,
-          value: `${completeCentimeter} cm equals ${formatted} jaxel`,
-        },
-      ]);
+      await interaction.reply({
+        embeds: [{
+          color: Colors.Blue,
+          description: `Conversion result: ${completeCentimeter} cm equals ${formatted} jaxel`
+        }]
+      });
     } else {
-      embed.addFields([
-        {
-          name: `Failure: Invalid values given`,
-          value: `Please use a valid number values for centimeter and meter`,
-        },
-      ]);
+      await interaction.reply({
+        embeds: [{
+          color: Colors.Blue,
+          description: `Failure: Invalid values given`
+        }]
+      });
     }
-    await interaction.reply({ embeds: [embed] });
-  },
+  }
 };

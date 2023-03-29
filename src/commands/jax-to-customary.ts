@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
-import { CommandInteraction, MessageEmbed } from "discord.js";
+import { Colors, CommandInteraction } from "discord.js";
 import { Command } from "./command";
 
 export const jaxToCustomaryCommand: Command = {
@@ -13,34 +13,34 @@ export const jaxToCustomaryCommand: Command = {
         .setRequired(true)
     ) as SlashCommandBuilder,
   async execute(interaction: CommandInteraction) {
-    const value = interaction.options.getNumber("value");
-    const embed = new MessageEmbed().setColor("#c8ff00");
+    const value = interaction.options.data.find(option => option.name === "value")?.value;
 
-    const centimeter = (value || 0) * 165;
+    const centimeter = (value as number || 0) * 165;
 
-    let inches = (centimeter*0.393700787)
+    let inches = (centimeter * 0.393700787);
     let feet = Math.floor(inches / 12);
     inches %= 12;
 
     const formattedInches = new Intl.NumberFormat("en-US", {
-      maximumFractionDigits: 2,
+      maximumFractionDigits: 2
     }).format(inches);
 
     if (value) {
-      embed.addFields([
-        {
-          name: `Conversion result:`,
-          value: `${value} jaxel equals ${feet} ft ${formattedInches} in`,
-        },
-      ]);
+      await interaction.reply({
+        embeds: [{
+          color: Colors.Blue,
+          description: `Conversion result: ${value} jaxel equals ${feet} ft ${formattedInches} in`
+        }]
+      });
     } else {
-      embed.addFields([
-        {
-          name: `Failure: Invalid value given`,
-          value: `Please use a valid number value`,
-        },
-      ]);
+      await interaction.reply({
+        embeds: [
+          {
+            color: Colors.Red,
+            description: `Failure: Invalid value given`
+          }
+        ]
+      });
     }
-    await interaction.reply({ embeds: [embed] });
-  },
+  }
 };

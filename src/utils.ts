@@ -1,10 +1,10 @@
-import { Client, Message } from "discord.js";
+import { Client, Message, GatewayIntentBits } from "discord.js";
 import fs from "fs";
 import { MESSAGE_PREFIX } from "./constants";
 
 const config = JSON.parse(fs.readFileSync("./config.json", "utf8"));
 
-export const client = new Client({ intents: ["GUILDS", "GUILD_MESSAGES"] });
+export const client = new Client({ intents: [GatewayIntentBits.GuildMessages] });
 void client.login(config.token);
 
 export function nthOccurrence(

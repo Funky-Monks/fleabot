@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
-import { CommandInteraction, MessageEmbed } from "discord.js";
+import { Colors, CommandInteraction } from "discord.js";
 import { Command } from "./command";
 
 export const customaryToJaxCommand: Command = {
@@ -21,23 +21,20 @@ export const customaryToJaxCommand: Command = {
         .setRequired(false)
     ) as SlashCommandBuilder,
   async execute(interaction: CommandInteraction) {
-    const inches = interaction.options.getNumber("inches") || 0;
-    const feet = interaction.options.getNumber("feet") || 0;
-
-    const embed = new MessageEmbed().setColor("#c8ff00");
+    const inches = interaction.options.data.find(option => option.name === "inches")?.value as number || 0;
+    const feet = interaction.options.data.find(option => option.name === "feet")?.value as number|| 0;
 
     const completeInches = feet * 12 + inches;
     const centimeter = 2.54 * completeInches;
     const jaxel = centimeter / 165;
     const formatted = new Intl.NumberFormat("en-US", {
-      maximumFractionDigits: 2,
+      maximumFractionDigits: 2
     }).format(jaxel);
-    embed.addFields([
-      {
-        name: `Conversion result:`,
-        value: `${feet} feet ${inches} in equals ${formatted} jaxel`,
-      },
-    ]);
-    await interaction.reply({ embeds: [embed] });
-  },
+    await interaction.reply({
+      embeds: [{
+        color: Colors.Blue,
+        description: `Conversion result: ${feet} feet ${inches} in equals ${formatted} jaxel`
+      }]
+    });
+  }
 };

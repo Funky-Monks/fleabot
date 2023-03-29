@@ -1,5 +1,5 @@
 import { MessageHandler } from "./messageHandler";
-import { Message, MessageAttachment, MessageEmbed } from "discord.js";
+import { Message } from "discord.js";
 import { extractMessageWithoutCommand } from "../utils";
 
 type Mapping = MappingEntry[];
@@ -36,8 +36,9 @@ export class SoundsHandler extends MessageHandler {
     if (!entry) {
       message.channel.send("File not known");
     } else {
-      const messageAttachment = new MessageAttachment(entry.url);
-      message.channel.send({ files: [messageAttachment] });
+      message.channel.send({ files: [{
+        attachment: entry.url
+      }] });
     }
   }
 }

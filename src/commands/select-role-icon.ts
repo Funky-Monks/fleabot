@@ -27,7 +27,7 @@ export const selectRoleIconCommand: Command = {
 
     const guild = interaction.guild!!;
     const userId = interaction.user.id;
-    const attachmentUrl = interaction.options.data.find(option => option.name === "role-icon").attachment!!.url;
+    const attachmentUrl = interaction.options.data.find(option => option.name === "role-icon")?.attachment?.url !!;
     const userRoleName = "user_icon_role:" + userId;
     const targetPosition = await determineTargetPosition(guild);
 
@@ -131,6 +131,6 @@ async function determineTargetPosition(guild: Guild) {
   const upmostColorRolePosition = Array.from((await guild.roles.fetch())
     .filter((role) => role.name.toLowerCase().includes("color:"))
     .values())
-    .sort((a, b) => b.position - a.position);
-  return upmostColorRolePosition[0].position + 1;
+    .sort((a, b) => b.position - a.position)!!;
+  return (upmostColorRolePosition[0]?.position || 0) + 1;
 }

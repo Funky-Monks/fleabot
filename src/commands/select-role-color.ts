@@ -25,7 +25,7 @@ export const selectRoleColorCommand: Command = {
 
     const guild = interaction.guild!!;
     const userId = interaction.user.id;
-    const hexcode = interaction.options.data.find((value) => value.name == "hexcode").value.toString();
+    const hexcode = interaction.options.data.find((value) => value.name == "hexcode")?.value?.toString()!!;
     const userRoleName = "user_color_role:" + userId;
     const color = parseInt(hexcode.replace(/^#/, ""), 16);
     const targetPosition = await determineTargetPosition(guild);
@@ -107,5 +107,5 @@ async function determineTargetPosition(guild: Guild) {
     .filter((role) => role.name.toLowerCase().includes("color:"))
     .values())
     .sort((a, b) => b.position - a.position);
-  return upmostColorRolePosition[0].position + 1;
+  return (upmostColorRolePosition[0]?.position || 0) + 1;
 }

@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
-import { CommandInteraction, MessageEmbed } from "discord.js";
+import { Colors, CommandInteraction } from "discord.js";
 import { Command } from "./command";
 
 export const jaxToMetricCommand: Command = {
@@ -13,23 +13,21 @@ export const jaxToMetricCommand: Command = {
         .setRequired(true)
     ) as SlashCommandBuilder,
   async execute(interaction: CommandInteraction) {
-    const value = interaction.options.getNumber("value");
-    const embed = new MessageEmbed().setColor("#c8ff00");
+    const value = interaction.options.data.find(option => option.name === "value")?.value;
     if (value) {
-      embed.addFields([
-        {
-          name: `Conversion result:`,
-          value: `${value} jaxel equals ${value * 165} cm`,
-        },
-      ]);
+      await interaction.reply({
+        embeds: [{
+          color: Colors.Blue,
+          description: `Conversion result: ${value} jaxel equals ${value as number * 165} cm`
+        }]
+      });
     } else {
-      embed.addFields([
-        {
-          name: `Failure: Invalid value given`,
-          value: `Please use a valid number value`,
-        },
-      ]);
+      await interaction.reply({
+        embeds: [{
+          color: Colors.Red,
+          description: `Failure: Invalid value given`
+        }]
+      });
     }
-    await interaction.reply({ embeds: [embed] });
-  },
+  }
 };

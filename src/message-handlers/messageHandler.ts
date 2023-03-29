@@ -1,5 +1,5 @@
 import { Message } from "discord.js";
-import { extractCommand, extractMessageWithoutCommand } from "../utils";
+import { extractCommand } from "../utils";
 
 export abstract class MessageHandler {
   abstract triggerMessageSubstrings(): string[];
