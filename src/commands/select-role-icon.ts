@@ -5,7 +5,6 @@ import * as util from "util";
 import { logger } from "../logger";
 import axios from "axios";
 import sharp, {Sharp} from "sharp";
-import {arrayBuffer} from "stream/consumers";
 
 export const selectRoleIconCommand: Command = {
   data: new SlashCommandBuilder()
