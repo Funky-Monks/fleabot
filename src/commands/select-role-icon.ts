@@ -10,17 +10,16 @@ export const selectRoleIconCommand: Command = {
     data: new SlashCommandBuilder()
         .setName("select-role-icon")
         .setDescription("Upload a role icon")
-        .addBooleanOption((option) =>
-            option
-                .setName("asterisk-mask")
-                .setDescription("Apply an RHCP asterisk cutout mask")
-                .setRequired(false))
         .addAttachmentOption((option) =>
             option
                 .setName("role-icon")
                 .setDescription("The role icon. Ideally a png of 128x128 px size, otherwise it will be scaled by the bot")
                 .setRequired(true)
-        ) as SlashCommandBuilder,
+        ).addBooleanOption((option) =>
+            option
+                .setName("asterisk-mask")
+                .setDescription("Apply an RHCP asterisk cutout mask")
+                .setRequired(false)) as SlashCommandBuilder,
     async execute(interaction: CommandInteraction) {
 
         await interaction.reply({
@@ -119,7 +118,7 @@ async function createIconRole(userRoleName: string,
     }
 }
 
-async function updateIconRole(userRole: Role, buffer:Buffer, interaction: CommandInteraction<any>) {
+async function updateIconRole(userRole: Role, buffer: Buffer, interaction: CommandInteraction<any>) {
     try {
 
         await userRole.edit({
