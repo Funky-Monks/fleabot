@@ -4,7 +4,7 @@ import { MESSAGE_PREFIX } from "./constants";
 
 const config = JSON.parse(fs.readFileSync("./config.json", "utf8"));
 
-export const client = new Client({ intents: [GatewayIntentBits.GuildMessages] });
+export const client = new Client({ intents: [GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildEmojisAndStickers, GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers] });
 void client.login(config.token);
 
 export function nthOccurrence(
