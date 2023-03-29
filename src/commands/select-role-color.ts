@@ -17,12 +17,10 @@ export const selectRoleColorCommand: Command = {
   async execute(interaction: CommandInteraction) {
 
     await interaction.reply({
-      ephemeral: true,
       embeds: [
         new MessageEmbed().setDescription("Request received. Please wait.")
       ]
     });
-
     const guild = interaction.guild!!;
     const userId = interaction.user.id;
     const hexcode = interaction.options.getString("hexcode")!!;
@@ -61,7 +59,7 @@ async function createColorRole(userRoleName: string,
       createdRole
     );
     logger.info(`Assigned role ${userRoleName} to user with id ${userId}`);
-    await interaction.reply({
+    await interaction.editReply({
       embeds: [
         new MessageEmbed().setDescription(`Created your role with color ${color}. Thank you!`)
       ]
@@ -69,7 +67,7 @@ async function createColorRole(userRoleName: string,
   } catch (e) {
     const msg = `An error occurred while creating color role: ${util.inspect(e)}`;
     logger.error(msg);
-    await interaction.reply({
+    await interaction.editReply({
       embeds: [
         new MessageEmbed().setDescription(msg).setColor("RED")
       ]
@@ -84,7 +82,7 @@ async function updateColorRole(userRole: Role, color: number, interaction: Comma
     });
     const msg = `Updated role ${userRole.name} with color ${color}`;
     logger.info(msg);
-    await interaction.reply({
+    await interaction.editReply({
       embeds: [
         new MessageEmbed().setDescription(`Updated your color role with hex color ${color}`)
       ]
@@ -92,7 +90,7 @@ async function updateColorRole(userRole: Role, color: number, interaction: Comma
   } catch (e) {
     const msg = `Failed to edit role ${userRole.id} ${util.inspect(e)}`;
     logger.error(msg);
-    await interaction.reply({
+    await interaction.editReply({
       embeds: [
         new MessageEmbed().setDescription(msg).setColor("RED")
       ]
