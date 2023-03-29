@@ -62,11 +62,13 @@ async function loadFile(attachmentUrl: string, isMasked: boolean) {
     const data: ArrayBuffer = axiosResponse.data;
     logger.info("Length of response was " + data.byteLength)
     const sharpData: Sharp = sharp(data);
-    let resized = sharpData.resize({height: 256, width: 256});
+    const dimensions = {height: 256, width: 256};
+    let resized = sharpData.resize(dimensions);
     let buf;
     if (isMasked) {
         buf = await sharp(__dirname + "/../asterisk-mask.png")
-            .extractChannel("red")
+            .resize(dimensions)
+            .extractChannel("alpha")
             .toBuffer()
             .then(alpha => resized
                 .joinChannel(alpha)
