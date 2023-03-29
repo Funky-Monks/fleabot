@@ -4,7 +4,8 @@ import { Command } from "./command";
 import * as util from "util";
 import { logger } from "../logger";
 import axios from "axios";
-import sharp from "sharp";
+import sharp, {Sharp} from "sharp";
+import {arrayBuffer} from "stream/consumers";
 
 export const selectRoleIconCommand: Command = {
   data: new SlashCommandBuilder()
@@ -47,15 +48,21 @@ export const selectRoleIconCommand: Command = {
 
 
 async function loadFile(attachmentUrl: string) {
+  logger.info("Loading attachment from url " + attachmentUrl)
   const axiosResponse = await axios
     .get(attachmentUrl, {
       responseType: "arraybuffer"
     });
-  const buf = await sharp(axiosResponse.data)
-    .resize({ height: 256, width: 256 })
+  const data: ArrayBuffer = axiosResponse.data;
+  logger.info("Length of response was " + data.byteLength)
+  const sharpData: Sharp = sharp(data);
+  const buf = await sharpData.resize({ height: 256, width: 256 })
     .png()
     .toBuffer();
-  return buf.toString("base64");
+  logger.info("Resized image. New bytesize: " + buf.byteLength)
+  const base64 = buf.toString("base64");
+  logger.info("Base64 size: " + base64.length)
+  return base64;
 }
 
 async function createIconRole(userRoleName: string,
