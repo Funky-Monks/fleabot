@@ -1,10 +1,10 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { Colors, CommandInteraction, Guild, GuildMemberRoleManager, Role } from "discord.js";
-
 import { Command } from "./command";
 import * as util from "util";
 import { logger } from "../logger";
 import axios from "axios";
+import sharp from "sharp";
 
 export const selectRoleIconCommand: Command = {
   data: new SlashCommandBuilder()
@@ -13,7 +13,7 @@ export const selectRoleIconCommand: Command = {
     .addAttachmentOption((option) =>
       option
         .setName("role-icon")
-        .setDescription("The role icon. Must be a png of 128x128 px size")
+        .setDescription("The role icon. Ideally a png of 128x128 px size, otherwise it will be scaled by the bot")
         .setRequired(true)
     ) as SlashCommandBuilder,
   async execute(interaction: CommandInteraction) {
@@ -51,8 +51,11 @@ async function loadFile(attachmentUrl: string) {
     .get(attachmentUrl, {
       responseType: "arraybuffer"
     });
-  return Buffer.from(axiosResponse.data, "binary")
-    .toString("base64");
+  const buf = await sharp(axiosResponse.data)
+    .resize({ height: 256, width: 256 })
+    .png()
+    .toBuffer();
+  return buf.toString("base64");
 }
 
 async function createIconRole(userRoleName: string,

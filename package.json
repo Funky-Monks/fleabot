@@ -15,7 +15,8 @@
     "node-cron": "3.0.2",
     "node-fetch": "3.3.1",
     "node-tweet-stream": "2.1.0",
-    "reddit-fetch": "1.5.1"
+    "reddit-fetch": "1.5.1",
+    "sharp": "^0.32.0"
   },
   "devDependencies": {
     "@types/async-retry": "1.4.5",
@@ -23,6 +24,7 @@
     "@types/moment-timezone": "0.5.30",
     "@types/node": "18.15.11",
     "@types/node-cron": "3.0.7",
+    "@types/sharp": "^0.31.1",
     "@types/typescript": "2.0.0",
     "husky": "8.0.3",
     "lint-staged": "13.2.0",
