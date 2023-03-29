@@ -43,6 +43,6 @@
   "scripts": {
     "prepare": "husky install",
     "dev-fleabot": "tsc-watch --noClear -p ./tsconfig.json --onSuccess \"node ./dist/fleabot.js\"",
-    "build": "rimraf ./dist && tsc"
+    "build": "rimraf ./dist && tsc && mv asterisk-mask.png dist"
   }
 }
