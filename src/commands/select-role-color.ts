@@ -48,20 +48,21 @@ async function createColorRole(userRoleName: string,
                                color: number,
                                position: number,
                                interaction: CommandInteraction<any>) {
-  const userId = interaction.user.id
+  const userId = interaction.user.id;
+  const hexColorString = `#${color.toString(16)}`;
   logger.info(`Role ${userRoleName} not found. Creating...`);
   try {
     const createdRole = await guild.roles.create({
       name: userRoleName, color, position, reason: "Created by coffeebot"
     });
-    logger.info(`Created role ${userRoleName} with color ${color}`);
+    logger.info(`Created role ${userRoleName} with color ${hexColorString}`);
     await (interaction.member!!.roles as GuildMemberRoleManager).add(
       createdRole
     );
     logger.info(`Assigned role ${userRoleName} to user with id ${userId}`);
     await interaction.editReply({
       embeds: [
-        new MessageEmbed().setDescription(`Created your role with color ${color}. Thank you!`)
+        new MessageEmbed().setDescription(`Created your role with color ${hexColorString}. Thank you!`).setColor(color)
       ]
     });
   } catch (e) {
@@ -80,11 +81,12 @@ async function updateColorRole(userRole: Role, color: number, interaction: Comma
     await userRole.edit({
       color
     });
-    const msg = `Updated role ${userRole.name} with color ${color}`;
+    const hexColorString = `#${color.toString(16)}`;
+    const msg = `Updated role ${userRole.name} with color ${hexColorString}`;
     logger.info(msg);
     await interaction.editReply({
       embeds: [
-        new MessageEmbed().setDescription(`Updated your color role with hex color ${color}`)
+        new MessageEmbed().setDescription(`Updated your color role with hex color ${hexColorString}`).setColor(color)
       ]
     });
   } catch (e) {
