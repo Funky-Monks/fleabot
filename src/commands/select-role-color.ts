@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
-import { CommandInteraction, Guild, GuildMemberRoleManager, MessageEmbed, Role } from "discord.js";
+import { CommandInteraction, Guild, GuildMemberRoleManager, Role } from "discord.js";
 import { Command } from "./command";
 import * as util from "util";
 import { logger } from "../logger";
@@ -19,13 +19,13 @@ export const selectRoleColorCommand: Command = {
     await interaction.reply({
       ephemeral: true,
       embeds: [
-        new MessageEmbed().setDescription("Request received. Please wait.")
+        { description: "Request received. Please wait." }
       ]
     });
 
     const guild = interaction.guild!!;
     const userId = interaction.user.id;
-    const hexcode = interaction.options.getString("hexcode")!!;
+    const hexcode = interaction.options.data.find((value) => value.name == "hexcode").value.toString();
     const userRoleName = "user_color_role:" + userId;
     const color = parseInt(hexcode.replace(/^#/, ""), 16);
     const targetPosition = await determineTargetPosition(guild);
@@ -64,9 +64,7 @@ async function createColorRole(userRoleName: string,
     logger.info(`Assigned role ${userRoleName} to user with id ${userId}`);
     await interaction.editReply({
       embeds: [
-        new MessageEmbed()
-          .setDescription(`Created your role with color ${hexColorString}. Thank you!`)
-          .setColor(color)
+        { description: `Created your role with color ${hexColorString}. Thank you!`, color }
       ]
     });
   } catch (e) {
@@ -74,9 +72,7 @@ async function createColorRole(userRoleName: string,
     logger.error(message);
     await interaction.editReply({
       embeds: [
-        new MessageEmbed()
-          .setDescription(message)
-          .setColor("RED")
+        { description: message, color }
       ]
     });
   }
@@ -92,9 +88,7 @@ async function updateColorRole(userRole: Role, color: number, interaction: Comma
     logger.info(msg);
     await interaction.editReply({
       embeds: [
-        new MessageEmbed()
-          .setDescription(`Updated your color role with hex color ${hexColorString}`)
-          .setColor(color)
+        { description: `Updated your color role with hex color ${hexColorString}`, color }
       ]
     });
   } catch (e) {
@@ -102,9 +96,7 @@ async function updateColorRole(userRole: Role, color: number, interaction: Comma
     logger.error(msg);
     await interaction.editReply({
       embeds: [
-        new MessageEmbed()
-          .setDescription(msg)
-          .setColor("RED")
+        { description: msg, color }
       ]
     });
   }

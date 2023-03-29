@@ -4,6 +4,7 @@ import { metricToJaxCommand } from "./metric-to-jax-command";
 import { jaxToCustomaryCommand } from "./jax-to-customary";
 import { customaryToJaxCommand } from "./customary-to-jax-command";
 import { selectRoleColorCommand } from "./select-role-color";
+import { selectRoleIconCommand } from "./select-role-icon";
 
 export const commands = [
   passCommand,
@@ -11,5 +12,6 @@ export const commands = [
   metricToJaxCommand,
   jaxToCustomaryCommand,
   customaryToJaxCommand,
-  selectRoleColorCommand
+  selectRoleColorCommand,
+  selectRoleIconCommand
 ];
