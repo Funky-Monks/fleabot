@@ -4,7 +4,8 @@ import {Command} from "./command";
 import * as util from "util";
 import {logger} from "../logger";
 import axios from "axios";
-import sharp, {Sharp} from "sharp";
+import sharp, {ResizeOptions, Sharp} from "sharp";
+import fs from "fs";
 
 export const selectRoleIconCommand: Command = {
     data: new SlashCommandBuilder()
@@ -62,22 +63,23 @@ async function loadFile(attachmentUrl: string, isMasked: boolean) {
     const data: ArrayBuffer = axiosResponse.data;
     logger.info("Length of response was " + data.byteLength)
     const sharpData: Sharp = sharp(data);
-    const dimensions = {height: 256, width: 256};
+    const dimensions: ResizeOptions = {height: 256, width: 256, fit: 'cover', position: 'center'};
     let resized = sharpData.resize(dimensions);
     let buf;
     if (isMasked) {
-        buf = await sharp(__dirname + "/../asterisk-mask.png")
+        const maskBuffer = await sharp(__dirname + "/../asterisk-mask.png")
             .resize(dimensions)
-            .extractChannel("alpha")
-            .toBuffer()
-            .then(alpha => resized
-                .joinChannel(alpha)
-                .png()
-                .toBuffer()
-            )
+            .toBuffer();
+
+        buf = await sharpData
+            .resize(dimensions)
+            .composite([{ input: maskBuffer, blend: 'dest-in' }])
+            .png()
+            .toBuffer();
     } else {
         buf = await resized.png().toBuffer()
     }
+    fs.createWriteStream("/tmp/result.png").write(buf)
     logger.info("Resized image. New bytesize: " + buf.byteLength)
     return buf;
 }
